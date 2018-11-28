@@ -107,4 +107,14 @@ const nextGeneration = function(currGeneration,bounds) {
   return getAliveCellIndex(nextGenerationWorld);
 }
 
-module.exports = { nextGeneration };
+module.exports = { nextGeneration,
+  createInitialBoard,
+  findNeighbourCells,
+  getNeighbourCellState,
+  nextGenerationState,
+  canBeAlive,
+  canBeDead,
+  isStateSame,
+  boardGenerator,
+  filterNeighbours,
+  createAliveCells };
