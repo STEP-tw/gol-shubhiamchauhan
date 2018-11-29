@@ -80,11 +80,11 @@ describe("findNeighbourCells", function() {
 
   describe("for middle cells", function() {
     it("should return nine neighbour cells", function() {
-      let result = [ [ 1, 0 ],
-        [ 1, 2 ],
-        [ 0, 0 ],
+      let result = [[ 0, 0 ],
         [ 0, 1 ],
         [ 0, 2 ],
+        [ 1, 0 ],
+        [ 1, 2 ],
         [ 2, 0 ],
         [ 2, 1 ],
         [ 2, 2 ] ];

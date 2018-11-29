@@ -1,3 +1,5 @@
+const { getCombination } = require('./util.js');
+
 const boardGenerator = function(rows, columns) {
   let board = new Array(rows).fill([]);
   return board.map(element => new Array(columns).fill("dead"));
@@ -26,16 +28,17 @@ const createInitialBoard = function(rows, columns, aliveCells) {
   return aliveCells.reduce(createAliveCells, emptyBoard);
 }
 
+const addToListValue = function(cell, difference) {
+  let result = [].concat(cell[0]+difference[0]);
+  result.push(cell[1]+difference[1]);
+  return result;
+}
+
 const findNeighbourCells = function(rows, columns, cell) {
-  let neighbourCells = [ [cell[0], cell[1]-1], [cell[0],cell[1]+1] ];
-
-  neighbourCells.push([cell[0]-1, cell[1]-1]);
-  neighbourCells.push([cell[0]-1, cell[1]]);
-  neighbourCells.push([cell[0]-1, cell[1]+1]);
-  neighbourCells.push([cell[0]+1, cell[1]-1]);
-  neighbourCells.push([cell[0]+1, cell[1]]);
-  neighbourCells.push([cell[0]+1, cell[1]+1]);
-
+  let differenceFromNeighbour = getCombination([-1,0,1],[-1,0,1]);
+  differenceFromNeighbour.splice(4,1);
+  addDifferenceToNeighbour = addToListValue.bind(null, cell);
+  neighbourCells = differenceFromNeighbour.map(addDifferenceToNeighbour);
   return neighbourCells.filter(filterNeighbours(rows, columns));
 }
 
