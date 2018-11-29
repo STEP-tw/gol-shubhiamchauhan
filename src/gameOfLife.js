@@ -108,12 +108,20 @@ const relativeCurrGeneration = function(topLeftBound) {
   }
 }
 
+const relativeNextGeneration = function(topLeftBound) {
+  return function(generation, aliveCellIndex) {
+    generation.push([aliveCellIndex[0]+topLeftBound[0],aliveCellIndex[1]+topLeftBound[1]]);
+    return generation;
+  }
+}
+
 const nextGeneration = function(currGeneration,bounds) {
   currGeneration = currGeneration.reduce(relativeCurrGeneration(bounds.topLeft),[]);
   let rows = (bounds.bottomRight[0]-bounds.topLeft[0])+1;
   let columns = (bounds.bottomRight[1]-bounds.topLeft[1])+1;
   let nextGenerationWorld = nextGenerationState(rows, columns, currGeneration,1);
-  return getAliveCellIndex(nextGenerationWorld);
+  let nextGenAliveCells = getAliveCellIndex(nextGenerationWorld);
+  return nextGenAliveCells.reduce(relativeNextGeneration(bounds.topLeft),[]);
 }
 
 module.exports = { nextGeneration,
@@ -127,3 +135,4 @@ module.exports = { nextGeneration,
   boardGenerator,
   filterNeighbours,
   createAliveCells };
+
