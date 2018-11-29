@@ -22,6 +22,7 @@ const filterNeighbours = function(rows, columns) {
 
 const createInitialBoard = function(rows, columns, aliveCells) {
   let emptyBoard = boardGenerator(rows, columns);
+  aliveCells = aliveCells.filter(filterNeighbours(rows, columns));
   return aliveCells.reduce(createAliveCells, emptyBoard);
 }
 
@@ -100,7 +101,15 @@ const getAliveCellIndex = function(board) {
   return aliveIndexes;
 }
 
+const relativeCurrGeneration = function(topLeftBound) {
+  return function(generation, aliveCellIndex) {
+    generation.push([aliveCellIndex[0]-topLeftBound[0],aliveCellIndex[1]-topLeftBound[1]]);
+    return generation;
+  }
+}
+
 const nextGeneration = function(currGeneration,bounds) {
+  currGeneration = currGeneration.reduce(relativeCurrGeneration(bounds.topLeft),[]);
   let rows = (bounds.bottomRight[0]-bounds.topLeft[0])+1;
   let columns = (bounds.bottomRight[1]-bounds.topLeft[1])+1;
   let nextGenerationWorld = nextGenerationState(rows, columns, currGeneration,1);
