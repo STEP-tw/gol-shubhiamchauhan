@@ -1,0 +1,24 @@
+dist: xenial
+language: node_js
+node_js:
+- '10.2'
+sudo: enabled
+install:
+- git clone $GOL_UI gol_ui
+- pwd
+- ls
+- mv src gol_ui/src/_src
+- cd gol_ui
+- npm install
+- node ./addHomepageToPackage.js
+script:
+- npm run build
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: "$GITHUB_TOKEN"
+  local-dir: "./gol_ui/build"
+  on:
+    branch: master
+  target-branch: gh-pages
+  verbose: true
