@@ -37,8 +37,8 @@ const addToListValue = function(cell, difference) {
 const findNeighbourCells = function(rows, columns, cell) {
   let differenceFromNeighbour = getCombination([-1,0,1],[-1,0,1]);
   differenceFromNeighbour.splice(4,1);
-  addDifferenceToNeighbour = addToListValue.bind(null, cell);
-  neighbourCells = differenceFromNeighbour.map(addDifferenceToNeighbour);
+  let addDifferenceToNeighbour = addToListValue.bind(null, cell);
+  let neighbourCells = differenceFromNeighbour.map(addDifferenceToNeighbour);
   return neighbourCells.filter(filterNeighbours(rows, columns));
 }
 
