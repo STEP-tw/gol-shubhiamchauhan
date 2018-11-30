@@ -70,12 +70,12 @@ const isStateSame = function(neighbourCellStates) {
 }
 
 const updateState = function(neighbourCells, index){
-  return function(initializer, cell, column){
+  return function(nextGenWorld, cell, column){
     let neighbourCellStates = neighbourCells([index, column]);
-    canBeAlive(neighbourCellStates) && initializer.push("alive");
-    canBeDead(neighbourCellStates) && initializer.push("dead");
-    isStateSame(neighbourCellStates) && initializer.push(cell);
-    return initializer;
+    canBeAlive(neighbourCellStates) && nextGenWorld.push("alive");
+    canBeDead(neighbourCellStates) && nextGenWorld.push("dead");
+    isStateSame(neighbourCellStates) && nextGenWorld.push(cell);
+    return nextGenWorld;
   }
 }
 
@@ -120,11 +120,11 @@ const relativeNextGeneration = function(topLeftBound) {
 
 const nextGeneration = function(currGeneration,bounds) {
   currGeneration = currGeneration.reduce(relativeCurrGeneration(bounds.topLeft),[]);
-  let rows = (bounds.bottomRight[0]-bounds.topLeft[0])+1;
-  let columns = (bounds.bottomRight[1]-bounds.topLeft[1])+1;
-  let nextGenerationWorld = nextGenerationState(rows, columns, currGeneration,1);
-  let nextGenAliveCells = getAliveCellIndex(nextGenerationWorld);
-  return nextGenAliveCells.reduce(relativeNextGeneration(bounds.topLeft),[]);
+  let rows = (bounds.bottomRight[0] - bounds.topLeft[0]) + 1;
+  let columns = (bounds.bottomRight[1] - bounds.topLeft[1]) + 1;
+  let nextGenerationWorld = nextGenerationState(rows, columns, currGeneration, 1);
+  let nextGenAliveCells = getAliveCellIndex( nextGenerationWorld );
+  return nextGenAliveCells.reduce(relativeNextGeneration( bounds.topLeft ), []);
 }
 
 module.exports = { nextGeneration,
@@ -138,4 +138,3 @@ module.exports = { nextGeneration,
   boardGenerator,
   filterNeighbours,
   createAliveCells };
-
