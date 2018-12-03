@@ -2,23 +2,21 @@ const { getCombination } = require('./util.js');
 
 const boardGenerator = function(rows, columns) {
   let board = new Array(rows).fill([]);
-  return board.map(element => new Array(columns).fill("dead"));
+  return board.map(element => new Array(columns).fill(0));
 }
 
 const createAliveCells = function(cells, position) {
-  cells[position[0]][position[1]] = "alive";
+  cells[position[0]][position[1]] = 1;
   return cells;
 }
 
-const isRealNeighbour = function(size) {
-  return function(index) {
-    return !(index < 0 || index >= size);
-  }
+const isRealNeighbour = function(size, index) {
+  return !(index < 0 || index >= size);
 }
 
 const filterNeighbours = function(rows, columns) {
   return function(position) {
-    return isRealNeighbour(rows)(position[0]) && isRealNeighbour(columns)(position[1]);
+    return isRealNeighbour(rows,position[0]) && isRealNeighbour(columns,position[1]);
   }
 }
 
@@ -51,17 +49,17 @@ const extractCellState = function(board) {
 }
 
 const getNeighbourCellState = function(rows, columns, board, cell) {
-  let cellState = { alive:[], dead:[]};
+  let cellState = { 1:[], 0:[]};
   let neighbours = findNeighbourCells(rows,columns, cell);
   return neighbours.reduce(extractCellState(board), cellState);
 }
 
 const canBeAlive = function(neighbourCellStates) {
-  return neighbourCellStates["alive"].length == 3;
+  return neighbourCellStates[1].length == 3;
 }
 
 const canBeDead = function(neighbourCellStates) {
-  let aliveCount = neighbourCellStates["alive"].length;
+  let aliveCount = neighbourCellStates[1].length;
   return (aliveCount < 2 || aliveCount > 3);
 }
 
@@ -72,8 +70,8 @@ const isStateSame = function(neighbourCellStates) {
 const updateState = function(neighbourCells, index){
   return function(nextGenWorld, cell, column){
     let neighbourCellStates = neighbourCells([index, column]);
-    canBeAlive(neighbourCellStates) && nextGenWorld.push("alive");
-    canBeDead(neighbourCellStates) && nextGenWorld.push("dead");
+    canBeAlive(neighbourCellStates) && nextGenWorld.push(1);
+    canBeDead(neighbourCellStates) && nextGenWorld.push(0);
     isStateSame(neighbourCellStates) && nextGenWorld.push(cell);
     return nextGenWorld;
   }
@@ -98,7 +96,7 @@ const getAliveCellIndex = function(board) {
   let aliveIndexes = [];
   for(let row = 0; row<board.length; row++) {
     for(let column = 0; column<board[row].length; column++) {
-      board[row][column]=="alive" && aliveIndexes.push([row,column]);
+      board[row][column]==1 && aliveIndexes.push([row,column]);
     }
   }
   return aliveIndexes;
